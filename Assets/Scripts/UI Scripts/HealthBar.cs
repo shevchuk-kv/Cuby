@@ -7,6 +7,7 @@ public class HealthBar : MonoBehaviour
     public static HealthBar instance { get; private set; }
     [SerializeField]
     Text health;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,6 +18,6 @@ public class HealthBar : MonoBehaviour
 
     public void SetValue(int value, int maxValue)
     {
-        health.text = "Health: " + value.ToString() + " / " + maxValue.ToString();
+        health.text = value.ToString() + " / " + maxValue.ToString();
     }
 }
