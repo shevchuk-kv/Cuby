@@ -14,16 +14,14 @@ public class PlayerController : Entity
 
     public int Health { get { return currentHealth; } }
 
-    bool isInvincible;
-    float invincibleTimer;
-    float timeInvincible = 1.0f;
-
-
     void Start()
     {
         currentHealth = maxHealth;
+        HealthBar.instance.SetValue(currentHealth, maxHealth);
+
         rigidBody = GetComponent<Rigidbody2D>();
         SetWalkBehaviour(new PlayerBehaviour(rigidBody, this.speed));
+
     }
 
     private void FixedUpdate()
@@ -41,34 +39,17 @@ public class PlayerController : Entity
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
 
-        if (isInvincible)
-        {
-            invincibleTimer -= Time.deltaTime;
-            if (invincibleTimer < 0)
-                isInvincible = false;
-        }
     }
 
     public override void ChangeHealth(int amount)
     {
-        if (amount < 0)
-        {
-            if (isInvincible)
-                return;
-
-            isInvincible = true;
-            invincibleTimer = timeInvincible;
-        }
-
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.AddForce(transform.up * 5.0f, ForceMode2D.Impulse);
 
-        Debug.Log(currentHealth + "/" + maxHealth);
+        HealthBar.instance.SetValue(currentHealth, maxHealth);
+
         if (currentHealth == 0)
             Debug.Log("Died");
     }
-
 
 }
 

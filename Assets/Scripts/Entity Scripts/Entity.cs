@@ -34,7 +34,10 @@ public class Entity : MonoBehaviour
 
     public virtual void ChangeHealth(int amount)
     {
-
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        
+        if (currentHealth == 0)
+            Debug.Log("Died");
     }
 }
 

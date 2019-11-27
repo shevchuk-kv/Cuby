@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ public class EnemyController : Entity
         //Поиск пересечений с объектом перед собой
         colliders = Physics2D.OverlapCircleAll(transform.position + transform.up * 0.5f + transform.right * direction * 0.7f, 0.1f);
 
-        if (colliders.Length > 0) 
+        if (colliders.Length > 0 && colliders.All(x => !x.GetComponent<PlayerController>())) 
             direction *= -1;
 
         //Поиск пересечений с полом перед собой
@@ -31,19 +31,17 @@ public class EnemyController : Entity
 
         PerformMove((float)direction);
     }
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        /*PlayerController player = other.GetComponent<PlayerController>();
-
-        if (Mathf.Abs(player.transform.position.x - transform.position.x) < 0.3f)
-            player.ChangeHealth(-1);
-            */
-
-        Entity player = other.GetComponent<Entity>();
-
-        if (player && player is PlayerController)
+        if (collision.gameObject.tag == "Player")
         {
-            player.ChangeHealth(-1);
+            collision.gameObject.SendMessage("ChangeHealth", -1);
+
+            Vector3 dir = (collision.transform.position - transform.position);
+
+            //collision.rigidbody.AddForce(transform.right * (direction * -1) * 8.0f, ForceMode2D.Impulse);
+
+            collision.rigidbody.AddForce(dir.normalized * 8.0f, ForceMode2D.Impulse);
         }
     }
 }
