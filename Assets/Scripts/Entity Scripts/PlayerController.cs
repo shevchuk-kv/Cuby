@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : Entity
 {
-    float jumpForce = 12.0f;
+    float jumpForce = 42.0f;
     Rigidbody2D rigidBody;
 
     bool onGround = false;
@@ -14,14 +14,21 @@ public class PlayerController : Entity
 
     public int Health { get { return currentHealth; } }
 
+    private void Awake()
+    {
+        CalculateStatWeight();
+        jumpForce *= size * size;
+    }
+
     void Start()
     {
-        currentHealth = maxHealth;
-        HealthBar.instance.SetValue(currentHealth, maxHealth);
+        HealthBar.instance.SetValue(currentHealth, currentHealth);
 
         rigidBody = GetComponent<Rigidbody2D>();
         SetWalkBehaviour(new PlayerBehaviour(rigidBody, this.speed));
+        rigidBody.mass = weight;
 
+        transform.localScale = new Vector3(size, size, 1);
     }
 
     private void FixedUpdate()

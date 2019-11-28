@@ -6,7 +6,7 @@ public class HealthBar : MonoBehaviour
 {
     public static HealthBar instance { get; private set; }
     [SerializeField]
-    Text health;
+    Text health = null;
 
     // Start is called before the first frame update
     void Awake()

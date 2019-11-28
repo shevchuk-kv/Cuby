@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class EnemyController : Entity
 {
-    Rigidbody2D body;
+    Rigidbody2D rigidBody;
     int direction;
     Collider2D[] colliders;
 
-    void Start()
+    private void Awake()
     {
-        speed = 70f;
         direction = -1;
-        body = GetComponent<Rigidbody2D>();
-        SetWalkBehaviour(new EnemyBehaviour(body, this.speed));
+        rigidBody = GetComponent<Rigidbody2D>();
+        CalculateStatWeight();
+
+        SetWalkBehaviour(new EnemyBehaviour(rigidBody, this.speed));
+        rigidBody.mass = weight;
+        transform.localScale = new Vector3(size, size, 1);
     }
+
     private void FixedUpdate()
     {
         //Поиск пересечений с объектом перед собой

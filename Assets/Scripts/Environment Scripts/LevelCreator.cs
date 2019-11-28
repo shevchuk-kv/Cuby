@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class LevelCreator : MonoBehaviour
 {
-    public Vector2Int worldSize;
+    //Vector2Int worldSize;
+    [SerializeField]
+    Transform lava;
+    [SerializeField]
+    Transform floor;
 
-    public Transform lava;
-    public Transform floor;
+    void GeneratePlayer()
+    {
+        
 
-    
+
+    }
     
 }

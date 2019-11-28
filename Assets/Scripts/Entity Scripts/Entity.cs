@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 
 public class Entity : MonoBehaviour
 {
-    protected float speed = 150.0f;
+    protected float speed = 180.0f;
 
     protected float size = 1.0f;
     [SerializeField]
@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
     [SerializeField]
     protected float minSize = 0.5f;
 
-    protected int currentHealth = 1;
+    protected int currentHealth;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     [SerializeField]
     protected int maxHealth = 3;
@@ -38,6 +38,22 @@ public class Entity : MonoBehaviour
         
         if (currentHealth == 0)
             Debug.Log("Died");
+    }
+
+    protected void CalculateStatWeight()
+    {
+        //UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
+        size = (float)Math.Round(UnityEngine.Random.Range(minSize, maxSize), 1);
+        
+        float kSize = (size - minSize) * 10 / ((maxSize - minSize) * 10);
+
+        weight = (int)Math.Round(kSize == 0 ? minWeight : kSize * (maxWeight - minWeight + 1));
+
+        currentHealth = (int)Math.Round(((double)weight / (maxWeight - minWeight + 1)) * (maxHealth - minHealth + 1));
+
+        speed *= size;
+
+        //Debug.LogFormat($"{size} | {kSize} | {weight} | {currentHealth}");
     }
 }
 

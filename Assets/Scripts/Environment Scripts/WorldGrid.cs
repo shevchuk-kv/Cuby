@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class WorldGrid : MonoBehaviour
 {
-
-    public LayerMask unwalkableMask;
-    public Vector2Int gridWorldSize;
+    
+    [SerializeField]
+    Vector2Int gridWorldSize;
    
     Node[,] grid;
     
