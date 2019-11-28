@@ -6,9 +6,12 @@ public class WorldGrid : MonoBehaviour
 {
     
     [SerializeField]
-    Vector2Int gridWorldSize;
-   
-    Node[,] grid;
+    Vector2Int worldSize;
+    public Vector2Int WorldSize { get => worldSize; 
+                                    set { worldSize = value;
+                                         CreateGrid();}}
+
+    public Node[,] grid;
     
     public List<Node> path;
     
@@ -18,13 +21,13 @@ public class WorldGrid : MonoBehaviour
         CreateGrid();
     }
 
-    void CreateGrid()
+    public void CreateGrid()
     {
-        grid = new Node[gridWorldSize.x, gridWorldSize.y];
+        grid = new Node[worldSize.x, worldSize.y];
         
-        for (int x = 0; x < gridWorldSize.x; x++)
+        for (int x = 0; x < worldSize.x; x++)
         {
-            for (int y = 0; y < gridWorldSize.y; y++)
+            for (int y = 0; y < worldSize.y; y++)
             {
                 bool walkable = true;
                 Vector2Int worldPoint = new Vector2Int(x, y);
@@ -49,7 +52,7 @@ public class WorldGrid : MonoBehaviour
                 int checkX = node.gridX + x;
                 int checkY = node.gridY + y;
 
-                if (checkX >= 0 && checkX < gridWorldSize.x && checkY >= 0 && checkY < gridWorldSize.y)
+                if (checkX >= 0 && checkX < worldSize.x && checkY >= 0 && checkY < worldSize.y)
                 {
                     neighbours.Add(grid[checkX, checkY]);
                 }

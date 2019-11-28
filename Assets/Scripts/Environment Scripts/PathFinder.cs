@@ -5,10 +5,11 @@ using System.Collections.Generic;
 public class PathFinder : MonoBehaviour
 {
 
-    public Vector2Int startPosition, targetPosition;
+    //public Vector2Int startPosition, targetPosition;
     WorldGrid grid;
     public WorldGrid Grid { get; set; }
     public Transform floor;
+    public Transform Floor { get => floor; set => floor = value; }
     void Awake()
     {
         grid = GetComponent<WorldGrid>();
@@ -17,15 +18,16 @@ public class PathFinder : MonoBehaviour
     void Start()
     {
         
-        FindPath(startPosition, targetPosition);
+        //FindPath(startPosition, targetPosition);
                 
-        CreateBlocks();
+        //CreateBlocks();
     }
 
-    void FindPath(Vector2Int startPos, Vector2Int targetPositionPos)
+    public void FindPath(Vector2Int startPos, Vector2Int targetPos)
     {
+        //Debug.LogFormat($"{startPos.x} {targetPos.x}");
         Node startNode = grid.NodeFromWorldPoint(startPos);
-        Node targetPositionNode = grid.NodeFromWorldPoint(targetPositionPos);
+        Node targetPositionNode = grid.NodeFromWorldPoint(targetPos);
         
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
@@ -48,6 +50,7 @@ public class PathFinder : MonoBehaviour
 
             if (node == targetPositionNode)
             {
+                
                 RetracePath(startNode, targetPositionNode);
                 //Debug.LogFormat($"{grid.path.Count}");
                 return;
@@ -86,9 +89,9 @@ public class PathFinder : MonoBehaviour
         }
         path.Reverse();
 
-        grid.path.Add(grid.NodeFromWorldPoint(startPosition));        
+        grid.path.Add(startNode);        
         grid.path.AddRange(path);
-        grid.path.Add(grid.NodeFromWorldPoint(targetPosition));
+        grid.path.Add(endNode);
     }
 
     int GetDistance(Node nodeA, Node nodeB)
@@ -96,7 +99,7 @@ public class PathFinder : MonoBehaviour
         return Mathf.Abs(nodeA.gridX - nodeB.gridX) + Mathf.Abs(nodeA.gridY - nodeB.gridY);
     }
 
-    void CreateBlocks()
+    public void CreateBlocks()
     {
         foreach (var node in grid.path)
             Instantiate(floor, new Vector3(node.gridX, node.gridY, 0), Quaternion.identity);
