@@ -11,9 +11,7 @@ public class PlayerController : Entity
     public Transform groundCheck;
     float groundRadius = 0.2f;
     public LayerMask whatIsGround;
-
-    public int Health { get { return currentHealth; } }
-
+    
     private void Awake()
     {
         CalculateStatWeight();
@@ -22,13 +20,11 @@ public class PlayerController : Entity
 
     void Start()
     {
-        HealthBar.instance.SetValue(currentHealth, currentHealth);
+        HealthBar.instance.SetValue(currentHealth, maxHealth);
 
         rigidBody = GetComponent<Rigidbody2D>();
         SetWalkBehaviour(new PlayerBehaviour(rigidBody, this.speed));
         rigidBody.mass = weight;
-
-        transform.localScale = new Vector3(size, size, 1);
     }
 
     private void FixedUpdate()
@@ -52,10 +48,16 @@ public class PlayerController : Entity
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
 
-        HealthBar.instance.SetValue(currentHealth, maxHealth);
+        HealthBar.instance.SetValue(currentHealth, maxHealth);               
+    }
 
-        if (currentHealth == 0)
-            Debug.Log("Died");
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            var direction = transform.InverseTransformPoint(collision.transform.position);
+            rigidBody.AddForce(direction * -9.0f * weight, ForceMode2D.Impulse);
+        }
     }
 
 }

@@ -50,8 +50,11 @@ public class Entity : MonoBehaviour
         weight = (int)Math.Round(kSize == 0 ? minWeight : kSize * (maxWeight - minWeight + 1));
 
         currentHealth = (int)Math.Round(((double)weight / (maxWeight - minWeight + 1)) * (maxHealth - minHealth + 1));
+        maxHealth = currentHealth;
 
-        speed *= size;
+        speed /= Mathf.Round(weight) * 0.5f;        
+
+        transform.localScale = new Vector3(size, size, 1);
 
         //Debug.LogFormat($"{size} | {kSize} | {weight} | {currentHealth}");
     }

@@ -16,7 +16,6 @@ public class EnemyController : Entity
 
         SetWalkBehaviour(new EnemyBehaviour(rigidBody, this.speed));
         rigidBody.mass = weight;
-        transform.localScale = new Vector3(size, size, 1);
     }
 
     private void FixedUpdate()
@@ -39,13 +38,7 @@ public class EnemyController : Entity
     {
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.SendMessage("ChangeHealth", -1);
-
-            Vector3 dir = (collision.transform.position - transform.position);
-
-            //collision.rigidbody.AddForce(transform.right * (direction * -1) * 8.0f, ForceMode2D.Impulse);
-
-            collision.rigidbody.AddForce(dir.normalized * 8.0f, ForceMode2D.Impulse);
+            collision.gameObject.SendMessage("ChangeHealth", -1);            
         }
     }
 }
