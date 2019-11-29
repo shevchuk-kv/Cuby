@@ -6,12 +6,14 @@ public class DamageZone : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        Entity player = other.GetComponent<Entity>();
+        Entity entity = other.GetComponent<Entity>();
         
-        if (player && player is PlayerController)
+        if (entity && entity is PlayerController)
         {
-            player.ChangeHealth(-player.CurrentHealth);
-            
+            entity.ChangeHealth(-entity.CurrentHealth);            
+        }else if (entity && entity is EnemyController)
+        {
+            Destroy(entity);
         }
     }
 }

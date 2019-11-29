@@ -52,7 +52,7 @@ public class Entity : MonoBehaviour
         currentHealth = (int)Math.Round(((double)weight / (maxWeight - minWeight + 1)) * (maxHealth - minHealth + 1));
         maxHealth = currentHealth;
 
-        speed /= Mathf.Round(weight) * 0.5f;        
+        speed /= Mathf.Round(weight * 0.5f / size);        
 
         transform.localScale = new Vector3(size, size, 1);
 

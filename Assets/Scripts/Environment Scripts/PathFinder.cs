@@ -4,28 +4,18 @@ using System.Collections.Generic;
 
 public class PathFinder : MonoBehaviour
 {
-
-    //public Vector2Int startPosition, targetPosition;
     WorldGrid grid;
     public WorldGrid Grid { get; set; }
-    public Transform floor;
+    [SerializeField]
+    Transform floor;
     public Transform Floor { get => floor; set => floor = value; }
     void Awake()
     {
         grid = GetComponent<WorldGrid>();
     }
 
-    void Start()
-    {
-        
-        //FindPath(startPosition, targetPosition);
-                
-        //CreateBlocks();
-    }
-
     public void FindPath(Vector2Int startPos, Vector2Int targetPos)
     {
-        //Debug.LogFormat($"{startPos.x} {targetPos.x}");
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetPositionNode = grid.NodeFromWorldPoint(targetPos);
         
@@ -50,9 +40,7 @@ public class PathFinder : MonoBehaviour
 
             if (node == targetPositionNode)
             {
-                
                 RetracePath(startNode, targetPositionNode);
-                //Debug.LogFormat($"{grid.path.Count}");
                 return;
             }
 
@@ -97,11 +85,5 @@ public class PathFinder : MonoBehaviour
     int GetDistance(Node nodeA, Node nodeB)
     {
         return Mathf.Abs(nodeA.gridX - nodeB.gridX) + Mathf.Abs(nodeA.gridY - nodeB.gridY);
-    }
-
-    public void CreateBlocks()
-    {
-        foreach (var node in grid.path)
-            Instantiate(floor, new Vector3(node.gridX, node.gridY, 0), Quaternion.identity);
-    }
+    }    
 }

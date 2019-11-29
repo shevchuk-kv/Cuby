@@ -397,10 +397,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d724afb8285d7bc47aa4baaf588500cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldSize: {x: 70, y: 20}
   lava: {fileID: 4644735395117517893, guid: 3909b0c5b4448fa49b65cb126a5b39de, type: 3}
-  floor: {fileID: 1167605184395721280, guid: 3c162f09ff44cd449bb7da9375feb2c7, type: 3}
   player: {fileID: 1383638372}
+  enemy: {fileID: -5059244035192061450, guid: d207de74cfd6ec84aa60a963c0411a70, type: 3}
 --- !u!1 &185442814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2864,6 +2863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1592770319}
+  player: {fileID: 1383638372}
 --- !u!114 &2126391993
 MonoBehaviour:
   m_ObjectHideFlags: 0

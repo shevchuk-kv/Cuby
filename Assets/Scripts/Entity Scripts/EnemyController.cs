@@ -11,6 +11,7 @@ public class EnemyController : Entity
     private void Awake()
     {
         direction = -1;
+        speed *= 0.5f;
         rigidBody = GetComponent<Rigidbody2D>();
         CalculateStatWeight();
 
@@ -21,13 +22,13 @@ public class EnemyController : Entity
     private void FixedUpdate()
     {
         //Поиск пересечений с объектом перед собой
-        colliders = Physics2D.OverlapCircleAll(transform.position + transform.up * 0.5f + transform.right * direction * 0.7f, 0.1f);
+        colliders = Physics2D.OverlapCircleAll(transform.position + transform.up * 0.5f + transform.right * 0.75f * direction * 0.7f, 0.1f);
 
         if (colliders.Length > 0 && colliders.All(x => !x.GetComponent<PlayerController>())) 
             direction *= -1;
 
         //Поиск пересечений с полом перед собой
-        colliders = Physics2D.OverlapCircleAll(transform.position + transform.right * direction - transform.up * 0.5f, 0.1f);
+        colliders = Physics2D.OverlapCircleAll(transform.position + transform.right * 0.5f * direction - transform.up * 0.5f, 0.1f);
 
         if (colliders.Length == 0)
             direction *= -1;

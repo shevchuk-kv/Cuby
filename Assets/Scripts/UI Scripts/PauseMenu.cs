@@ -4,10 +4,11 @@ public class PauseMenu : MonoBehaviour
 {
     bool gameIsPaused = false;
     public GameObject pauseMenuUI;
-
+    public PlayerController player;
+    
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && player.CurrentHealth != 0)
         {
             if(gameIsPaused)
             {

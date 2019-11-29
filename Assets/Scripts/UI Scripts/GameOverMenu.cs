@@ -8,6 +8,7 @@ public class GameOverMenu : MonoBehaviour
     bool gameIsPaused = false;
     public GameObject gameOverMenuUI;
     public PlayerController player;
+   
     public void NewGame()
     {
         gameOverMenuUI.SetActive(false);
