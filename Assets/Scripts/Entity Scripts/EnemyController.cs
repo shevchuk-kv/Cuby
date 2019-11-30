@@ -6,6 +6,7 @@ public class EnemyController : Entity
 {
     Rigidbody2D rigidBody;
     int direction;
+    float kSize;
     Collider2D[] colliders;
 
     private void Awake()
@@ -14,6 +15,7 @@ public class EnemyController : Entity
         speed *= 0.5f;
         rigidBody = GetComponent<Rigidbody2D>();
         CalculateStatWeight();
+        kSize = size > minSize + (maxSize - minSize * 0.5) ? 1.25f : 1;
 
         SetWalkBehaviour(new EnemyBehaviour(rigidBody, this.speed));
         rigidBody.mass = weight;
@@ -21,17 +23,13 @@ public class EnemyController : Entity
 
     private void FixedUpdate()
     {
-        //Поиск пересечений с объектом перед собой
-        colliders = Physics2D.OverlapCircleAll(transform.position + transform.up * 0.5f + transform.right * 0.75f * direction * 0.7f, 0.1f);
-
+        colliders = Physics2D.OverlapCircleAll(transform.position + transform.right * 0.55f * direction * kSize, 0.05f);
         if (colliders.Length > 0 && colliders.All(x => !x.GetComponent<PlayerController>())) 
             direction *= -1;
 
-        //Поиск пересечений с полом перед собой
-        colliders = Physics2D.OverlapCircleAll(transform.position + transform.right * 0.5f * direction - transform.up * 0.5f, 0.1f);
 
-        if (colliders.Length == 0)
-            direction *= -1;
+
+        Debug.DrawLine(transform.position, transform.position + transform.right * 0.55f * direction * kSize);
 
         PerformMove((float)direction);
     }
