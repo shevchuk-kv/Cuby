@@ -8,7 +8,7 @@ public class GameOverMenu : MonoBehaviour
     bool gameIsPaused = false;
 
     [SerializeField]
-    GameObject gameOverMenuUI;
+    GameObject gameOverMenuUI = null;
     [SerializeField]
     PlayerController player = null;
     [SerializeField]

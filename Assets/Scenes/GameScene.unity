@@ -3004,4 +3004,4 @@ MonoBehaviour:
   gameOverMenuUI: {fileID: 1515407944}
   player: {fileID: 1383638372}
   levelCreator: {fileID: 178707340}
-  endLevelPoint: {fileID: 0}
+  endLevelPoint: {fileID: 1481295803}

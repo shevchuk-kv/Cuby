@@ -8,11 +8,11 @@ public class LevelCreator : MonoBehaviour
 {
     Vector2Int worldSize;
     [SerializeField]
-    Transform lava; 
+    Transform lava = null; 
     [SerializeField]
-    PlayerController player;
+    PlayerController player = null;
     [SerializeField]
-    EnemyController enemy;
+    EnemyController enemy = null;
     [SerializeField]
     EndLevelPoint endLevelPoint = null;
 
@@ -42,25 +42,30 @@ public class LevelCreator : MonoBehaviour
 
     public void GenerateLevel()
     {
-        
-        int numberPairs = Random.Range(worldSize.x / 8, worldSize.x / 4);
+        //Количество пар
+        int numberPairs = Random.Range(worldSize.x / 8, worldSize.x / 4);  
+        //Количество пропастей
         int numberPrecipices = Random.Range(numberPairs / 3, numberPairs / 2);
 
         int step = worldSize.x / (numberPairs + numberPrecipices);
+        //Ширина пропасти
         int precipiceSize = 0;
 
+        //Начальная позиция ( 0, середина уровня +- 1/4 размера карты )
         Vector2Int point1 = new Vector2Int(0, Random.Range(worldSize.y / 2 - worldSize.y / 4, worldSize.y / 2 + worldSize.y / 4));
         Vector2Int point2 = new Vector2Int(point1.x + step, point1.y + Mathf.Clamp(Random.Range(-2, 2), 0, worldSize.y - 1));
-
+                
         minHeight = point1.y;
 
         pointsPairs.Add(new Tuple<Vector2Int, Vector2Int>(point1, point2));
 
         for (int i = 1; i < numberPairs; i++)
         {
+            //новая точка = (Предыдущая точка + ширина пропасти, генерируется высота от [-1 до 1) )
             point1 = new Vector2Int(pointsPairs[i - 1].Item2.x + precipiceSize, Mathf.Clamp(pointsPairs[i - 1].Item2.y + Random.Range(-1, 1), 0, worldSize.y - 1));
             point2 = new Vector2Int(Mathf.Clamp(point1.x + step, 0, worldSize.x), Mathf.Clamp(point1.y + Random.Range(-2, 2), 0, worldSize.y - 1));
 
+            //Проверка на выход за размер карты
             if (point1.x >= worldSize.x || point2.x >= worldSize.x)
                 break;
             if (minHeight > point1.y || minHeight > point2.y)

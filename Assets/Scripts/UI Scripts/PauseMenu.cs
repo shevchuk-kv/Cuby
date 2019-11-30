@@ -4,13 +4,13 @@ public class PauseMenu : MonoBehaviour
 {
     bool gameIsPaused = false;
     [SerializeField]
-    GameObject pauseMenuUI;
+    GameObject pauseMenuUI = null;
     [SerializeField]
-    PlayerController player;
+    PlayerController player = null;
     [SerializeField]
-    LevelCreator levelCreator;
+    LevelCreator levelCreator = null;
     [SerializeField]
-    EndLevelPoint endLevelPoint;
+    EndLevelPoint endLevelPoint = null;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && player.CurrentHealth != 0 && !endLevelPoint.LevelComplete)

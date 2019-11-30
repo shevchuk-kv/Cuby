@@ -16,11 +16,13 @@ public class PathFinder : MonoBehaviour
 
     public void FindPath(Vector2Int startPos, Vector2Int targetPos)
     {
+        //Создается 2 списка вершин.
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetPositionNode = grid.NodeFromWorldPoint(targetPos);
         
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
+        //В ожидающие добавляется точка старта, список рассмотренных пока пуст.
         openSet.Add(startNode);
 
         while (openSet.Count > 0)
@@ -28,6 +30,7 @@ public class PathFinder : MonoBehaviour
             Node node = openSet[0];
             for (int i = 1; i < openSet.Count; i++)
             {
+                //Из списка точек на рассмотрение выбирается точка с наименьшим F. Обозначим ее X
                 if (openSet[i].fCost < node.fCost || openSet[i].fCost == node.fCost && openSet[i].hCost < node.hCost)
                 {
                     
@@ -35,27 +38,34 @@ public class PathFinder : MonoBehaviour
                 }
             }
 
+            //Переносим X из списка ожидающих рассмотрения в список уже рассмотренных.
             openSet.Remove(node);
             closedSet.Add(node);
 
+            //Если X — цель, то мы нашли маршрут
             if (node == targetPositionNode)
             {
                 RetracePath(startNode, targetPositionNode);
                 return;
             }
 
+            //Для каждой из точек, соседних для X (обозначим эту соседнюю точку Y), делаем следующее
             foreach (Node neighbour in grid.GetNeighbours(node))
             {
+                //Если Y уже находится в рассмотренных — пропускаем ее.
                 if (!neighbour.walkable || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
 
                 int newCostToNeighbour = node.gCost + GetDistance(node, neighbour);
+                //Если же Y в списке на рассмотрение — проверяем, если X.G + расстояние от X до Y < Y.G
                 if (newCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                 {
+                    //Y.G на X.G + расстояние от X до Y
                     neighbour.gCost = newCostToNeighbour;
                     neighbour.hCost = GetDistance(neighbour, targetPositionNode);
+                    //точку, из которой пришли в Y на X
                     neighbour.parent = node;
 
                     if (!openSet.Contains(neighbour))

@@ -15,7 +15,7 @@ public class EnemyController : Entity
         speed *= 0.5f;
         rigidBody = GetComponent<Rigidbody2D>();
         CalculateStatWeight();
-        kSize = size > minSize + (maxSize - minSize * 0.5) ? 1.50f : 1;
+        kSize = size > minSize + (maxSize - minSize * 0.5) ? 1.25f : size == 1 ? 1.8f : 1;
 
         SetWalkBehaviour(new EnemyBehaviour(rigidBody, this.speed));
         rigidBody.mass = weight;
