@@ -3,12 +3,17 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     bool gameIsPaused = false;
-    public GameObject pauseMenuUI;
-    public PlayerController player;
-    
+    [SerializeField]
+    GameObject pauseMenuUI;
+    [SerializeField]
+    PlayerController player;
+    [SerializeField]
+    LevelCreator levelCreator;
+    [SerializeField]
+    EndLevelPoint endLevelPoint;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && player.CurrentHealth != 0)
+        if (Input.GetKeyDown(KeyCode.Escape) && player.CurrentHealth != 0 && !endLevelPoint.LevelComplete)
         {
             if(gameIsPaused)
             {
@@ -37,6 +42,12 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         Resume();
+    }
+
+    public void RestartGame()
+    {
+        Resume();
+        levelCreator.RestartLevel();
     }
 
     public void ExitGame()

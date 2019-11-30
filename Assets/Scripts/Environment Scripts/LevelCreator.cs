@@ -13,17 +13,20 @@ public class LevelCreator : MonoBehaviour
     PlayerController player;
     [SerializeField]
     EnemyController enemy;
+    [SerializeField]
+    EndLevelPoint endLevelPoint = null;
 
     PathFinder pathFinder;
     WorldGrid grid;
+
     List<Tuple<Vector2Int, Vector2Int>> pointsPairs;
-    List<Vector2Int> enemiesPositions;
+    List<Vector3> enemiesPositions;
     int minHeight;
 
     private void Awake()
     {
         pointsPairs = new List<Tuple<Vector2Int, Vector2Int>>();
-        enemiesPositions = new List<Vector2Int>();
+        enemiesPositions = new List<Vector3>();
 
         pathFinder = GetComponent<PathFinder>();
         grid = GetComponent<WorldGrid>();
@@ -39,12 +42,15 @@ public class LevelCreator : MonoBehaviour
 
     public void GenerateLevel()
     {
-        int numberPairs = Random.Range(worldSize.x / 4, worldSize.x / 2);
+        
+        int numberPairs = Random.Range(worldSize.x / 8, worldSize.x / 4);
         int numberPrecipices = Random.Range(numberPairs / 3, numberPairs / 2);
+
         int step = worldSize.x / (numberPairs + numberPrecipices);
+        int precipiceSize = 0;
 
         Vector2Int point1 = new Vector2Int(0, Random.Range(worldSize.y / 2 - worldSize.y / 4, worldSize.y / 2 + worldSize.y / 4));
-        Vector2Int point2 = new Vector2Int(point1.x + step, point1.y + Mathf.Clamp(Random.Range(-3, 2), 0, worldSize.y - 1));
+        Vector2Int point2 = new Vector2Int(point1.x + step, point1.y + Mathf.Clamp(Random.Range(-2, 2), 0, worldSize.y - 1));
 
         minHeight = point1.y;
 
@@ -52,8 +58,8 @@ public class LevelCreator : MonoBehaviour
 
         for (int i = 1; i < numberPairs; i++)
         {
-            point1 = new Vector2Int(pointsPairs[i - 1].Item2.x + 2, Mathf.Clamp(pointsPairs[i - 1].Item2.y + Random.Range(-1, 1), 0, worldSize.y - 1));
-            point2 = new Vector2Int(Mathf.Clamp(point1.x + step, 0, worldSize.x), Mathf.Clamp(point1.y + Random.Range(-3, 2), 0, worldSize.y - 1));
+            point1 = new Vector2Int(pointsPairs[i - 1].Item2.x + precipiceSize, Mathf.Clamp(pointsPairs[i - 1].Item2.y + Random.Range(-1, 1), 0, worldSize.y - 1));
+            point2 = new Vector2Int(Mathf.Clamp(point1.x + step, 0, worldSize.x), Mathf.Clamp(point1.y + Random.Range(-2, 2), 0, worldSize.y - 1));
 
             if (point1.x >= worldSize.x || point2.x >= worldSize.x)
                 break;
@@ -74,17 +80,22 @@ public class LevelCreator : MonoBehaviour
     {
         player.transform.position = new Vector3(pointsPairs[0].Item1.x, pointsPairs[0].Item1.y + 1, 1);
 
-        int numberEnemies = Mathf.Clamp(Random.Range(worldSize.x / 20, worldSize.x / 8), 0, pointsPairs.Count);        
+        int numberEnemies = Mathf.Clamp(Random.Range(worldSize.x / 20, worldSize.x / 8), 0, pointsPairs.Count);
+
+        List<Tuple<Vector2Int, Vector2Int>> availablePairs = new List<Tuple<Vector2Int, Vector2Int>>();
+        availablePairs.AddRange(pointsPairs);
+        availablePairs.RemoveAt(0);
 
         for (int i = 0; i < numberEnemies; i++)
         {
-            //int index = Random.Range(5, pathFinder.Grid.path[pathFinder.Grid.path.Count - 1].gridX);
-            //enemiesPositions.Add(new Vector2Int(pathFinder.Grid.path[index].gridX, pathFinder.Grid.path[index].gridY + 1));
-            //Instantiate(enemy, new Vector3(pathFinder.Grid.path[index].gridX, pathFinder.Grid.path[index].gridY + 1, 1), Quaternion.identity);
+            int index = Random.Range(0, availablePairs.Count);  
 
-            int index = Random.Range(1, pointsPairs.Count - 1);
-            enemiesPositions.Add(new Vector2Int(pointsPairs[index].Item1.x, pointsPairs[index].Item1.y + 1));
-            Instantiate(enemy, new Vector3(pointsPairs[index].Item1.x, pointsPairs[index].Item1.y + 1, 1), Quaternion.identity);
+            Vector3 enemyPosition = new Vector3(availablePairs[index].Item1.x, availablePairs[index].Item1.y + 2, 1);
+
+            enemiesPositions.Add(enemyPosition);
+            Instantiate(enemy, enemyPosition, Quaternion.identity);
+
+            availablePairs.RemoveAt(index);
         }
     }
 
@@ -96,8 +107,24 @@ public class LevelCreator : MonoBehaviour
         }
 
         lava.transform.localScale = new Vector3(worldSize.x + worldSize.x / 2, 1, 1);
-        Instantiate(lava, new Vector3(worldSize.x / 2, minHeight - 1, 1), Quaternion.identity);        
+        Instantiate(lava, new Vector3(worldSize.x / 2, minHeight - 1, 1), Quaternion.identity);
+
+        endLevelPoint.transform.position = new Vector3(pathFinder.Grid.path[pathFinder.Grid.path.Count - 1].gridX, pathFinder.Grid.path[pathFinder.Grid.path.Count - 1].gridY + 2, 1);
     }
+
+    public void RestartLevel()
+    {
+        int i = 0;
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            enemy.transform.position = new Vector3(enemiesPositions[i].x, enemiesPositions[i++].y, 1);
+        }
+        
+        player.ChangeHealth(player.MaxHealth);
+        player.transform.position = new Vector3(pointsPairs[0].Item1.x, pointsPairs[0].Item1.y + 1, 1);
+    }
+
+    
 
 }
 

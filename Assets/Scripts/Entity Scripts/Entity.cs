@@ -5,6 +5,7 @@ using System;
 
 public class Entity : MonoBehaviour
 {
+    [SerializeField]
     protected float speed = 180.0f;
 
     protected float size = 1.0f;
@@ -17,6 +18,7 @@ public class Entity : MonoBehaviour
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     [SerializeField]
     protected int maxHealth = 3;
+    public int MaxHealth { get => maxHealth; set => maxHealth = value; }
     [SerializeField]
     protected int minHealth = 1;
 
