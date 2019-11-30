@@ -6,35 +6,23 @@ using UnityEngine.SceneManagement;
 public class GameOverMenu : MonoBehaviour
 {
     bool gameIsPaused = false;
-
-    [SerializeField]
-    GameObject gameOverMenuUI;
-    [SerializeField]
-    PlayerController player = null;
-    [SerializeField]
-    LevelCreator levelCreator = null;
-    [SerializeField]
-    EndLevelPoint endLevelPoint = null;
+    public GameObject gameOverMenuUI;
+    public PlayerController player;
+   
+    public void NewGame()
+    {
+        gameOverMenuUI.SetActive(false);
+        gameIsPaused = false;
+        Time.timeScale = 1f;        
+        SceneManager.LoadScene(1);        
+    }
+    
     public void FixedUpdate()
     {
-        if(player.CurrentHealth == 0 || endLevelPoint.LevelComplete && !gameIsPaused)
+        if(player.CurrentHealth == 0 && !gameIsPaused)
         {
             Pause();
         }
-    }
-
-    public void NewGame()
-    {
-        Resume();
-        endLevelPoint.LevelComplete = false;
-        SceneManager.LoadScene(1);
-    }
-
-    public void RestartGame()
-    {
-        Resume();
-        endLevelPoint.LevelComplete = false;
-        levelCreator.RestartLevel();
     }
 
     public void Pause()
@@ -42,17 +30,5 @@ public class GameOverMenu : MonoBehaviour
         gameOverMenuUI.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
-    }
-
-    private void Resume()
-    {
-        gameOverMenuUI.SetActive(false);
-        gameIsPaused = false;
-        Time.timeScale = 1f;
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 }

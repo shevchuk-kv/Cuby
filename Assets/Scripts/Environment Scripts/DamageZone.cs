@@ -11,6 +11,9 @@ public class DamageZone : MonoBehaviour
         if (entity && entity is PlayerController)
         {
             entity.ChangeHealth(-entity.CurrentHealth);            
+        }else if (entity && entity is EnemyController)
+        {
+            Destroy(entity);
         }
     }
 }
