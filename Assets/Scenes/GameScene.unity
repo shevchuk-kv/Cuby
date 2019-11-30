@@ -400,7 +400,7 @@ MonoBehaviour:
   lava: {fileID: 4644735395117517893, guid: 3909b0c5b4448fa49b65cb126a5b39de, type: 3}
   player: {fileID: 1383638372}
   enemy: {fileID: -5059244035192061450, guid: d207de74cfd6ec84aa60a963c0411a70, type: 3}
-  endLevelManager: {fileID: 0}
+  endLevelPoint: {fileID: 1481295803}
 --- !u!1 &185442814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2988,6 +2988,7 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 1592770319}
   player: {fileID: 1383638372}
   levelCreator: {fileID: 178707340}
+  endLevelPoint: {fileID: 1481295803}
 --- !u!114 &2126391993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3003,3 +3004,4 @@ MonoBehaviour:
   gameOverMenuUI: {fileID: 1515407944}
   player: {fileID: 1383638372}
   levelCreator: {fileID: 178707340}
+  endLevelPoint: {fileID: 0}
