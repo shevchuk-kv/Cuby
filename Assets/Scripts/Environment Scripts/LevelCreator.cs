@@ -49,7 +49,7 @@ public class LevelCreator : MonoBehaviour
 
         int step = worldSize.x / (numberPairs + numberPrecipices);
         //Ширина пропасти
-        int precipiceSize = 0;
+        int precipiceSize = 2;
 
         //Начальная позиция ( 0, середина уровня +- 1/4 размера карты )
         Vector2Int point1 = new Vector2Int(0, Random.Range(worldSize.y / 2 - worldSize.y / 4, worldSize.y / 2 + worldSize.y / 4));
@@ -93,15 +93,22 @@ public class LevelCreator : MonoBehaviour
 
         for (int i = 0; i < numberEnemies; i++)
         {
-            int index = Random.Range(0, availablePairs.Count);  
-
-            Vector3 enemyPosition = new Vector3(availablePairs[index].Item1.x, availablePairs[index].Item1.y + 2, 1);
-
-            enemiesPositions.Add(enemyPosition);
-            Instantiate(enemy, enemyPosition, Quaternion.identity);
-
-            availablePairs.RemoveAt(index);
+            int indexPair = Random.Range(0, availablePairs.Count);
+            int indexPath = pathFinder.Grid.path.FindIndex(x => x.gridX == availablePairs[indexPair].Item1.x);
+            for (int j = availablePairs[indexPair].Item1.x; j < availablePairs[indexPair].Item2.x; j++)
+            {
+                if (pathFinder.Grid.path[indexPath].gridY == pathFinder.Grid.path[indexPath + 1].gridY)
+                {
+                    enemiesPositions.Add(new Vector3(pathFinder.Grid.path[indexPath + 1].gridX, pathFinder.Grid.path[indexPath + 1].gridY + 1, 1));
+                    Instantiate(enemy, new Vector3(pathFinder.Grid.path[indexPath + 1].gridX, pathFinder.Grid.path[indexPath + 1].gridY + 1, 1), Quaternion.identity);
+                    break;
+                }
+                indexPath++;
+            }
+            availablePairs.RemoveAt(indexPair);
         }
+
+        //Debug.LogFormat($"{enemiesPositions.Count} {pointsPairs.Count}");            
     }
 
     public void CreateBlocks()
